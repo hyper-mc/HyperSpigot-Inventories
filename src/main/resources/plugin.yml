@@ -1,0 +1,3 @@
+name: HyperSpigot-Inventories
+version: '${project.version}'
+main: net.hyper.mc.hyperspigotinventories.HyperSpigot_Inventories
