@@ -34,4 +34,8 @@ public final class InventoriesPlugin extends JavaPlugin {
     public void openServer(Player player){
         this.serverInventory.open(player);
     }
+
+    public void openLobbies(String type){
+
+    }
 }
