@@ -36,6 +36,5 @@ public final class InventoriesPlugin extends JavaPlugin {
     }
 
     public void openLobbies(String type){
-
     }
 }
