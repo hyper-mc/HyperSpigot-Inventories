@@ -1,10 +1,32 @@
 package net.hyper.mc.inventories.server;
 
+import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import io.github.rysefoxx.inventory.plugin.pagination.Pagination;
+import io.github.rysefoxx.inventory.plugin.pagination.SlotIterator;
+import net.hyper.mc.inventories.ItemError;
+import net.hyper.mc.spigot.lobbies.LobbyManager;
+import net.hyper.mc.spigot.lobbies.ServerLobby;
+import net.hyper.mc.spigot.lobbies.WorldLobby;
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemCreator;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class LobbiesMenu implements InventoryProvider {
+
+    private String type;
+    private LobbyManager lobbyManager = Bukkit.getHyperSpigot().getLobbyManager();
+
+    public LobbiesMenu(String type) {
+        this.type = type;
+    }
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -17,6 +39,36 @@ public class LobbiesMenu implements InventoryProvider {
     }
 
     public void set(Player player, InventoryContents content) {
+        Pagination pagination = content.pagination();
+        List<WorldLobby> worldLobbies = lobbyManager.getLobby(type, "default");
+        List<String> serverLobbies = lobbyManager.getNetworkLobby(type, "default");
 
+        pagination.setItemsPerPage(7*3);
+        pagination.iterator(SlotIterator.builder()
+                .startPosition(1, 1)
+                .type(SlotIterator.SlotIteratorType.HORIZONTAL).build());
+
+        for(WorldLobby l : worldLobbies){
+            ItemCreator item = Bukkit.createItemCreator(Material.WOOL);
+            if(player.getLobby() == l){
+                item.setColor(DyeColor.GREEN);
+                item.withEnchant(Enchantment.LUCK, 1);
+            } else{
+                item.setColor(DyeColor.GRAY);
+            }
+            item.removeFlags();
+            pagination.addItem(new IntelligentItem(item.done(), i -> {
+                l.teleport((Player) i.getWhoClicked());
+            }, new ItemError()));
+        }
+
+        for(String l : serverLobbies){
+            ItemCreator item = Bukkit.createItemCreator(Material.WOOL);
+            item.setColor(DyeColor.GRAY);
+            item.removeFlags();
+            pagination.addItem(new IntelligentItem(item.done(), i -> {
+                lobbyManager.connectServerLobby(l, (Player) i.getWhoClicked());
+            }, new ItemError()));
+        }
     }
 }

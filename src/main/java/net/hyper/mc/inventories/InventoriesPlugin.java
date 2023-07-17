@@ -2,6 +2,7 @@ package net.hyper.mc.inventories;
 
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import net.hyper.mc.inventories.server.LobbiesMenu;
 import net.hyper.mc.inventories.server.ServerMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,5 +37,10 @@ public final class InventoriesPlugin extends JavaPlugin {
     }
 
     public void openLobbies(String type){
+        RyseInventory.builder()
+                .title("§7Lobbies: "+type)
+                .provider(new LobbiesMenu(type))
+                .size(9*6)
+                .build(this);
     }
 }
