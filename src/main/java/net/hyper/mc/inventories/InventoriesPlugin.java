@@ -5,6 +5,7 @@ import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import net.hyper.mc.inventories.party.PartyMenu;
 import net.hyper.mc.inventories.server.LobbiesMenu;
 import net.hyper.mc.inventories.server.ServerMenu;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
