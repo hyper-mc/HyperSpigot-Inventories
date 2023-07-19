@@ -3,6 +3,7 @@ package net.hyper.mc.inventories;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import net.hyper.mc.inventories.confirm.ConfirmMenu;
+import net.hyper.mc.inventories.party.PartyInvitesMenu;
 import net.hyper.mc.inventories.party.PartyMembersMenu;
 import net.hyper.mc.inventories.party.PartyMenu;
 import net.hyper.mc.inventories.server.LobbiesMenu;
@@ -19,6 +20,7 @@ public final class InventoriesPlugin extends JavaPlugin {
     public static RyseInventory serverInventory;
     public static RyseInventory partyInventory;
     public static RyseInventory partyMembersInventory;
+    public static RyseInventory partyInvitesInventory;
 
     @Override
     public void onEnable() {
@@ -38,6 +40,12 @@ public final class InventoriesPlugin extends JavaPlugin {
                 .provider(new PartyMembersMenu())
                 .size(6*9)
                 .title("§7Membros da Party:")
+                .build(this);
+
+        partyInvitesInventory = RyseInventory.builder()
+                .provider(new PartyInvitesMenu())
+                .size(6*9)
+                .title("§§7Convites da Party:")
                 .build(this);
     }
 

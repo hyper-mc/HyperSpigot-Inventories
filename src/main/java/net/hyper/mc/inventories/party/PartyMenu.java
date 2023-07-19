@@ -56,7 +56,7 @@ public class PartyMenu implements InventoryProvider {
                     .withName("§aMembros da Party")
                     .removeFlags()
                     .done();
-            ItemStack partidaExclsuiva = Bukkit.createItemCreator(Material.ENDER_PEARL)
+            ItemStack partidaExclusiva = Bukkit.createItemCreator(Material.ENDER_PEARL)
                     .addLore(new ArrayList<>(Arrays.asList("§7Clique para criar uma partida privada.")))
                     .withName("§aPartida Privada")
                     .done();
@@ -68,10 +68,10 @@ public class PartyMenu implements InventoryProvider {
                     .addLore(new ArrayList<>(Arrays.asList("§7Clique para deletar a party.")))
                     .withName("§cDeletar Party").done();
             content.set(10, IntelligentItem.empty(infoStack));
-            content.set(11, IntelligentItem.of(convites, new ItemError(), i -> {}));
+            content.set(11, IntelligentItem.of(convites, new ItemError(), i -> InventoriesPlugin.partyInvitesInventory.open((Player) i.getWhoClicked())));
             content.set(12, IntelligentItem.of(members, new ItemError(), i -> InventoriesPlugin.partyMembersInventory.open((Player) i.getWhoClicked())));
             //meio vazio
-            content.set(14, IntelligentItem.of(partidaExclsuiva, new ItemError(), i -> {}));
+            content.set(14, IntelligentItem.of(partidaExclusiva, new ItemError(), i -> {}));
             content.set(15, IntelligentItem.of(convidarStack, new ItemError(), i -> {}));
             content.set(16, IntelligentItem.of(excluir, new ItemError(), i -> {
                 ((Player) i.getWhoClicked()).openConfirmMenu((pl, evt) -> {
