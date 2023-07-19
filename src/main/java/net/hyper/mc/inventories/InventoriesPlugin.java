@@ -2,10 +2,12 @@ package net.hyper.mc.inventories;
 
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import net.hyper.mc.inventories.confirm.ConfirmMenu;
 import net.hyper.mc.inventories.party.PartyMembersMenu;
 import net.hyper.mc.inventories.party.PartyMenu;
 import net.hyper.mc.inventories.server.LobbiesMenu;
 import net.hyper.mc.inventories.server.ServerMenu;
+import net.hyper.mc.spigot.model.ConfirmModel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -61,5 +63,13 @@ public final class InventoriesPlugin extends JavaPlugin {
 
     public void openParty(Player player){
         partyInventory.open(player);
+    }
+
+    public void openConfirm(Player player, ConfirmModel YES, ConfirmModel NO){
+        RyseInventory.builder()
+                .title("§7Confirme sua ação")
+                .provider(new ConfirmMenu(YES, NO))
+                .size(9*3)
+                .build(this).open(player);
     }
 }
