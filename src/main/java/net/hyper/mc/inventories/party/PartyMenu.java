@@ -3,6 +3,7 @@ package net.hyper.mc.inventories.party;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import net.hyper.mc.inventories.InventoriesPlugin;
 import net.hyper.mc.inventories.ItemError;
 import net.hyper.mc.spigot.player.party.Party;
 import org.bukkit.Bukkit;
@@ -67,7 +68,7 @@ public class PartyMenu implements InventoryProvider {
                     .withName("§cDeletar Party").done();
             content.set(10, IntelligentItem.empty(infoStack));
             content.set(11, IntelligentItem.of(convites, new ItemError(), i -> {}));
-            content.set(12, IntelligentItem.of(members, new ItemError(), i -> {}));
+            content.set(12, IntelligentItem.of(members, new ItemError(), i -> InventoriesPlugin.partyMembersInventory.open(player)));
             //meio vazio
             content.set(14, IntelligentItem.of(partidaExclsuiva, new ItemError(), i -> {}));
             content.set(15, IntelligentItem.of(convidarStack, new ItemError(), i -> {}));

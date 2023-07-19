@@ -2,6 +2,7 @@ package net.hyper.mc.inventories;
 
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import net.hyper.mc.inventories.party.PartyMembersMenu;
 import net.hyper.mc.inventories.party.PartyMenu;
 import net.hyper.mc.inventories.server.LobbiesMenu;
 import net.hyper.mc.inventories.server.ServerMenu;
@@ -13,22 +14,28 @@ public final class InventoriesPlugin extends JavaPlugin {
 
     public static InventoryManager inventoryManager;
 
-    private RyseInventory serverInventory;
-    private RyseInventory partyInventory;
+    public static RyseInventory serverInventory;
+    public static RyseInventory partyInventory;
+    public static RyseInventory partyMembersInventory;
 
     @Override
     public void onEnable() {
         inventoryManager = new InventoryManager(this);
         inventoryManager.invoke();
-        this.serverInventory = RyseInventory.builder()
+        serverInventory = RyseInventory.builder()
                 .provider(new ServerMenu())
                 .size(9*6)
                 .title("§7Modos de Jogo:")
                 .build(this);
-        this.partyInventory = RyseInventory.builder()
+        partyInventory = RyseInventory.builder()
                 .provider(new PartyMenu())
                 .size(3*9)
-                .title("§7Informações da Party")
+                .title("§7Informações da Party:")
+                .build(this);
+        partyMembersInventory = RyseInventory.builder()
+                .provider(new PartyMembersMenu())
+                .size(6*9)
+                .title("§7Membros da Party:")
                 .build(this);
     }
 
@@ -41,7 +48,7 @@ public final class InventoriesPlugin extends JavaPlugin {
     }
 
     public void openServer(Player player){
-        this.serverInventory.open(player);
+        serverInventory.open(player);
     }
 
     public void openLobbies(String type, Player player){
@@ -53,6 +60,6 @@ public final class InventoriesPlugin extends JavaPlugin {
     }
 
     public void openParty(Player player){
-        this.partyInventory.open(player);
+        partyInventory.open(player);
     }
 }
