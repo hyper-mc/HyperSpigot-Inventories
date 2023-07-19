@@ -6,6 +6,7 @@ import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import net.hyper.mc.inventories.InventoriesPlugin;
 import net.hyper.mc.inventories.ItemError;
 import net.hyper.mc.spigot.player.party.Party;
+import net.hyper.mc.spigot.player.party.PartyRole;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -68,11 +69,24 @@ public class PartyMenu implements InventoryProvider {
                     .withName("§cDeletar Party").done();
             content.set(10, IntelligentItem.empty(infoStack));
             content.set(11, IntelligentItem.of(convites, new ItemError(), i -> {}));
-            content.set(12, IntelligentItem.of(members, new ItemError(), i -> InventoriesPlugin.partyMembersInventory.open(player)));
+            content.set(12, IntelligentItem.of(members, new ItemError(), i -> InventoriesPlugin.partyMembersInventory.open((Player) i.getWhoClicked())));
             //meio vazio
             content.set(14, IntelligentItem.of(partidaExclsuiva, new ItemError(), i -> {}));
             content.set(15, IntelligentItem.of(convidarStack, new ItemError(), i -> {}));
-            content.set(16, IntelligentItem.of(excluir, new ItemError(), i -> {}));
+            content.set(16, IntelligentItem.of(excluir, new ItemError(), i -> {
+                ((Player) i.getWhoClicked()).openConfirmMenu((pl, evt) -> {
+                    Party p = pl.getParty();
+                    if(p == null){
+                        pl.sendMessage("§cVocê não está em uma party!");
+                        return;
+                    }
+                    if(!p.getOwner().getName().equals(pl.getName())){
+                        pl.sendMessage("§cVocê não é dono da party para excluí-la!");
+                        return;
+                    }
+                    Bukkit.getHyperSpigot().getPartyManager().delete(pl);
+                }, (pl, evt) -> pl.openPartyMenu());
+            }));
         }
     }
 }
