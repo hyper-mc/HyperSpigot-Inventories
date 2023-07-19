@@ -7,18 +7,15 @@ import io.github.rysefoxx.inventory.plugin.pagination.Pagination;
 import io.github.rysefoxx.inventory.plugin.pagination.SlotIterator;
 import net.hyper.mc.inventories.ItemError;
 import net.hyper.mc.spigot.player.party.Party;
-import net.hyper.mc.spigot.player.party.PartyPlayer;
-import net.hyper.mc.spigot.player.party.PartyRole;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Calendar;
 
-public class PartyMembersMenu implements InventoryProvider {
+public class PartyInvitesMenu implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -38,15 +35,20 @@ public class PartyMembersMenu implements InventoryProvider {
                 .type(SlotIterator.SlotIteratorType.HORIZONTAL)
                 .startPosition(1,1 ).build());
         if(party != null){
-            Map<PartyPlayer, PartyRole> members = new HashMap<>();
-            for(PartyPlayer pl : members.keySet()) {
+            for(String s : party.getConvites().keySet()){
+                long time = party.getConvites().getOrDefault(s, 0L);
+                if (time <= Calendar.getInstance().getTimeInMillis() && !party.isOpen()) {
+                    party.removeConvite(player.getName());
+                    continue;
+                }
                 ItemStack item = Bukkit.createItemCreator(Material.SKULL_ITEM)
-                        .withName("§a" + pl.getName())
-                        .withOwner(pl.getName())
-                        .addLore(Arrays.asList("§7Cargo: §f" + members.get(pl).getName(), "§7"))
-                        .removeFlags()
+                        .withName("§a"+s)
+                        .withOwner(s)
+                        .addLore(Arrays.asList("", "§cClique para remover o convite."))
                         .done();
-                pagination.addItem(IntelligentItem.of(item, new ItemError(), i -> pagination.previous()));
+                pagination.addItem(IntelligentItem.of(item, new ItemError(), i -> {
+                    party.removeConvite(s);
+                }));
             }
         }
 

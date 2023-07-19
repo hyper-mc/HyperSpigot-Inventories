@@ -27,7 +27,7 @@ public class PartyMenu implements InventoryProvider {
         set(player, contents);
     }
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm");
 
     public void set(Player player, InventoryContents content){
         Party party = player.getParty();
